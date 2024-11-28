@@ -67,3 +67,25 @@ a:hover {
         font-size: 1.5rem;
     }
 }
+
+#hashContainer {
+    position: relative;
+}
+
+#copyHashBtn {
+    top: 0px; /* Espaciado desde la parte superior */
+    right: 0px; /* Espaciado desde la parte derecha */
+    position: absolute;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#copyHashBtn:hover {
+    background-color: #f8f9fa;
+    border-color: #0056b3;
+    color: #0056b3;
+    cursor: pointer;
+}

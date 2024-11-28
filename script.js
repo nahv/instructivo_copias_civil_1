@@ -50,7 +50,7 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
 
    // Calcular hash
 const hash = await calculateHash(file);
-hashOutput.innerHTML = `Link: ${link}<br>SHA256: ${hash}`;
+hashOutput.innerHTML = `URL: ${link}<br>SHA256: ${hash}`;
 resultSection.style.display = 'block';
 
     // Generar y mostrar QR
@@ -63,4 +63,24 @@ resultSection.style.display = 'block';
             extension: "png"
         });
     });
+});
+
+// Copiar el contenido del hashOutput al portapapeles
+document.getElementById('copyHashBtn').addEventListener('click', () => {
+    const hashOutput = document.getElementById('hashOutput');
+    const content = hashOutput.innerText;
+
+    if (content.trim() === "") {
+        alert("No hay contenido para copiar.");
+        return;
+    }
+
+    navigator.clipboard.writeText(content)
+        .then(() => {
+            alert("Copiado al portapapeles.");
+        })
+        .catch(err => {
+            console.error("Error al copiar:", err);
+            alert("Hubo un error al intentar copiar el contenido.");
+        });
 });
