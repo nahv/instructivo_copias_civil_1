@@ -7,77 +7,56 @@
     <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+     <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
 </head>
 <body>
     <header class="text-center p-3 bg-primary text-white">
         <h1>Copias para traslado digitales <br> en cédulas y cartas documento</h1>
     </header>
-    <div class="centered_container container my-4">
+    <div class="centered_container my-4">
         <main>
             <section id="objetivo" class="section-box mb-4">
                 <h2 class="text-center">Objetivo</h2>
                 <p>
-                    Este instructivo recomienda cómo <strong>adjuntar copias para traslado de manera digital </strong> en las notificaciones<br>
-                    para usarse en las cédulas que se diligencian a través del Bus Federal de Justicia o en cartas documento.
+                    Este instructivo recomienda cómo <strong>adjuntar copias para traslado de manera digital </strong> en sus notificaciones.<br>
+                    Para usar en cédulas que se diligencian a través del Bus Federal de Justicia o en cartas documento.
                 </p>
             </section>
-
             <section id="pasos" class="section-box mb-4">
                 <h2 class="text-center">Pasos</h2>
                 <ol>
-                    <li>
+                    <li class="mb-4">
                         <h3>📑 Prepare las copias</h3>
-                        <br>
                         <p>Es recomendable unir todas las copias en <strong>un solo archivo PDF</strong>.<br>
-                            Puede utilizar algún programa libre y gratuito como <a href="https://www.pdf24.org/en/" target="_blank">PDF24</a> para unirlas si las tiene en archivos separados.</p>
+                        Puede utilizar programas gratuitos como <a href="https://www.pdf24.org/en/" target="_blank">PDF24</a> para unirlas si las tiene en archivos separados.</p>
                     </li>
-                    <br>
-                    <li class="mt-3">
-                        <h3>🔒 Generar el código hash</h3>
+                    <li class="mb-4">
+                        <h3>☁️ Suba las copias a la nube</h3>
+                        <p>Suba el archivo a un servicio de almacenamiento en la nube, como <a href="https://drive.google.com/" target="_blank">Google Drive</a> o <a href="https://www.dropbox.com/" target="_blank">Dropbox</a>. <br>
+                        Asegúrese de configurar el nivel de acceso como <strong>público</strong> (que cualquiera con el link pueda acceder).</p>
+                    </li>
+                    <li class="mb-4">
+                        <h3>🔒📲 Generar hash y el QR</h3>
                         <div class="info-box p-3">
-                            <strong>Nota:</strong> Esto es un código que permite verificar irrefutablemente que las copias que recibe el notificado son las originales que usted adjuntó y que no fueron alteradas.
+                            <strong>Nota:</strong> El hash es un código que permite verificar irrefutablemente que las copias que recibe el notificado son las originales que usted adjuntó y que permanecen sin alterar luego de la diligencia. <br>El QR permite copiar fácilmente el link desde la cámara de cualquier celular.
                         </div> <br>
-                        <p>
-                            Puede utilizar herramientas libres y gratuitas para generarlo, por ejemplo 7-Zip:</em>
-                            <ul>
-                                <li><a href="https://www.7-zip.org/" target="_blank">Descargue 7-zip</a> e instale.</li>
-                                <li>Haga click derecho en el archivo de las copias.</li>
-                                <li>Seleccione <strong>7-Zip > CRC SHA > SHA-256</strong>.</li>
-                            </ul><br>
-                            Obtendrá un código de 256 caracteres único para esas copias. 🔑
-                        </p>
-                    </li>
-                    <br>
-                    <li class="mt-3">
-                        <h3>☁️ Subir copias a la nube</h3>
-                        <p>Suba ese archivo en un servicio de almacenamiento en la nube (como <a href="https://drive.google.com/" target="_blank">Google Drive</a> o <a href="https://www.dropbox.com/" target="_blank">Dropbox</a>).<br>
-                        Asegúrese de que el nivel de acceso sea público y no restringido (que cualquiera con el link pueda acceder).</p>
-                    </li>
-                    <br>
-                    <li class="mt-3">
-                        <h3>📲 Generar el QR</h3>
-                       <p>
-                            Genere un código QR que direccione al link del archivo que subió a la nube. <br>
-                            Puede usar herramientas en línea como <a href="https://www.qr-code-generator.com" target="_blank">QR Code Generator</a>.<br>
-                            O bien en Google Chrome <i>(y otros navegadores)</i><strong> > Guardar y compartir > Generar Código QR </strong>
-                        </p><br>
-                        <div class="centered_container">
-                        <img src="qr_chrome.png" width="100%" height="100%">
+                        <p>Con la siguiente herramienta puede generar ambos. <br>Cargue el archivo de las copias y su link.<br>(note que el archivo <strong>debe ser el mismo</strong> que está alojado en el link) </p>
+                        <input type="file" id="fileInput" class="form-control mb-3">
+                        <input type="url" id="linkInput" placeholder="Link a las copias. Ejemplo: https://drive.google.com/file/d/1DwcOH2yUEt2iKPwh2zoccFmL8KfjLhk_/view" class="form-control mb-3">
+                        <div class="row">
+                            <div class="col"></div>
+                        <button id="generateBtn" class="btn btn-primary col">Generar hash y QR</button>
+                            <div class="col"></div>
                         </div>
-                        <p>Obtendrá una imágen con el QR para descargar.</p>
-                    </li>
-                    <br>
-                    <li class="mt-3">
-                        <h3>✍️ Insertar en la cédula</h3>
-                        <p>Redacte su cédula o carta en un archivo de texto y al final de la misma inserte <strong>el link, el QR y el hash generados</strong>.</p>
-                        <p>Se verá similar a lo siguiente:</p><br>
-                        
-                        <img src="qr_example.png" width="100%" height="100%">
-                    </li>
-                    <br>
-                    <li class="mt-3">
-                        <h3>📤 Exportar y presentar</h3><br>
-                        <p>
+                        <section id="resultSection" style="display: none; margin-top: 2rem;">
+                            <h4 class="text-center">Resultados</h4>
+                            <p id="hashOutput" class="info-box p-3 bg-light border" style="width:100%"></p>
+                            <div id="qrContainer" class="text-center">
+                                 <div id="qrCanvas" class="border"></div> 
+                                <button id="downloadQrBtn" class="btn btn-secondary mt-3">Descargar QR</button>
+                            </div>
+                            <h3>📤 Exportar y presentar</h3><br>
+                        <p>✍️ Redacte su cédula o carta en un archivo de texto y al final de la misma inserte <strong>el link, el QR y el hash generados</strong>.</p>
                             ✅ Convierta su cédula o carta a PDF y presentela via Forum, adjuntando recaudos si correspondiere.
                             <br>
                             <br>
@@ -94,20 +73,20 @@
             <section id="notas" class="section-box mb-4">
                 <h2 class="text-center">📌</h2>
                 <ul>
-                    
                     <li>🚫 Es importante que <strong>no</strong> modifique el archivo de las copias en la nube una vez que envió el documento.</li>
                     <li>🌎 Los documentos compartidos deben tener acceso público para poder ser consultados.</li>
                     <li>✅ Puede verificar la integridad del archivo comparando los hashes antes y después de enviarlo.</li>
-                    <li>🛠️ Use herramientas oficiales y de confianza para garantizar seguridad.</li>
+                    <li>🛠️ Si tiene inconvenientes al generar los códigos asegúrese de utilizar un navegador actualizado.</li>
                 </ul>
             </section>
+                        </section>
+                    </li>
+                </ol>
         </main>
     </div>
     <footer class="text-center p-3 bg-primary text-white">
-        <p><strong>&copy; 2024 Juzgado Civil y Comercial N° 1. Corrientes</strong></p>
+        <p><strong>&copy; Desarrollado por Nahuel Vallejos<br>Juzgado Civil y Comercial N° 1. Corrientes 2024</strong></p>
     </footer>
-    <!-- Bootstrap JS (opcional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
