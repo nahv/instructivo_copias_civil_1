@@ -89,3 +89,15 @@ a:hover {
     color: #0056b3;
     cursor: pointer;
 }
+
+
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#verifyHashContainer {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}

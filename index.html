@@ -37,11 +37,15 @@
                     <li class="mb-4">
                         <h3>🔒📲 Generar hash y QR</h3>
                         <div class="info-box p-3">
-                            <strong>Nota:</strong> El <i>hash</i> es un código que permite verificar irrefutablemente que las copias recibidas sean idénticas a las originales y no hayan sido alteradas. El QR facilita el acceso al link desde la cámara del celular.
+                            <strong>Nota:</strong> El <i>hash</i> es un código que permite verificar que las copias recibidas en el archivo sean idénticas a las precisadas en la notificación. El QR facilita el acceso al link desde la cámara del celular.
                         </div> <br>
-                        <p>Con la siguiente herramienta puede generar ambos. <br>Cargue el archivo de las copias y su link público. <br> (El archivo <strong>debe ser el mismo</strong> que el que está alojado en el link) </p>
+                        <p>Cargue el <strong>archivo de las copias y su link público:</strong>
+                            <br>
+                            <br>
                         <input type="file" id="fileInput" class="form-control mb-3">
-                        <input type="url" id="linkInput" placeholder="Link. Ejemplo: https://drive.google.com/file/d/1DwcOH2yUEt2iKPwh2zoccFmL8KfjLhk_/view" class="form-control mb-3">
+                        <label>Link:</label>
+                        <input type="url" id="linkInput" placeholder="Ejemplo: https://drive.google.com/file/d/1DwcOH2yUEt2iKPwh2zoccFmL8KfjLhk_/view" class="form-control mb-3">
+
                         <div class="row">
                             <div class="col"></div>
                         <button id="generateBtn" class="btn btn-primary col">Generar hash y QR</button>
@@ -59,7 +63,7 @@
 <br>
                             <h3>📤 Adjuntar y presentar</h3><br>
                         <p>✍️ Redacte su cédula o carta en un archivo de texto y al final de la misma inserte <strong>el link, el QR y el hash generados</strong>.</p>
-                            ✅ Convierta su cédula o carta a PDF y presentela via Forum, adjuntando recaudos si correspondieren.
+                            ✅ Convierta su cédula o carta a PDF y presentela via Forum.
                             <br>
                             <br>
                             <div class="info-box p-3">
@@ -77,18 +81,53 @@
                 <ul>
                     <li>🚫 Es importante que <strong>no</strong> modifique el archivo de las copias en la nube una vez que envió el documento.</li>
                     <li>🌎 Los documentos compartidos deben tener acceso público para poder ser consultados.</li>
-                    <li>✅ Puede verificar la integridad del archivo comparando los hashes antes y después de enviarlo.</li>
-                    <li>🛠️ Si tiene inconvenientes al generar los códigos asegúrese de utilizar un navegador actualizado.</li>
+                    <li>✅ Puede verificar el hash de cualquier archivo en la siguiente herramienta:</li> 
                 </ul>
+                <div class="row">
+                    <div class="col"></div>
+                <button type="button" class="btn btn-light w-100 mt-3 col" data-bs-toggle="modal" data-bs-target="#verifyModal">
+                    Verificador de hash
+                  </button>
+                    <div class="col"></div>
+                </div>
             </section>
                         </section>
                     </li>
                 </ol>
         </main>
     </div>
+<!-- Modal Verificador de SHA256 -->
+<div class="modal fade" id="verifyModal" tabindex="-1" aria-labelledby="verifyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="verifyModalLabel">Verificar hash</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="file" id="verifyFileInput" class="form-control mb-3">
+                <div id="verifyResultSection" style="display: none; margin-top: 1rem;">
+                    <h6>Hash <i>(SHA256)</i>:</h6>
+                    <div id="verifyHashContainer" class="info-box p-2 bg-light border">
+                        <p id="verifyHashOutput" class="m-0"></p>
+                        <button id="copyVerifyHashBtn" class="btn btn-outline-secondary btn-sm mt-2">Copiar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="https://es.wikipedia.org/wiki/SHA-2" target="_blank" class="text-decoration-none small text-muted">
+                    <i>¿Qué es hash SHA-256?</i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
     <footer class="text-center p-3 bg-primary text-white">
         <p><strong>&copy; Desarrollado por Nahuel Vallejos<br>Juzgado Civil y Comercial N° 1<br> Poder Judicial de la Provincia de Corrientes. 2024</strong></p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

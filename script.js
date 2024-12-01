@@ -36,12 +36,12 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     const resultSection = document.getElementById('resultSection');
 
     if (!fileInput.files.length) {
-        alert("Por favor, seleccione un archivo para generar su hash.");
+        alert("Seleccione un archivo para generar su hash.");
         return;
     }
 
     if (!linkInput.value) {
-        alert("Por favor, ingrese un link válido para generar el QR.");
+        alert("Ingrese un link para generar el QR.");
         return;
     }
 
@@ -83,4 +83,40 @@ document.getElementById('copyHashBtn').addEventListener('click', () => {
             console.error("Error al copiar:", err);
             alert("Hubo un error al intentar copiar el contenido.");
         });
+});
+
+// Detectar cambios en el input de archivo y calcular el hash automáticamente
+document.getElementById('verifyFileInput').addEventListener('change', async (event) => {
+    const fileInput = event.target;
+    const hashOutput = document.getElementById('verifyHashOutput');
+    const resultSection = document.getElementById('verifyResultSection');
+
+    // Verificar si se seleccionó un archivo
+    if (!fileInput.files.length) {
+        resultSection.style.display = 'none';
+        return;
+    }
+
+    const file = fileInput.files[0];
+
+    try {
+        // Calcular el hash
+        const hash = await calculateHash(file);
+        hashOutput.textContent = hash;
+        resultSection.style.display = 'block';
+    } catch (error) {
+        console.error("Error al calcular el hash:", error);
+        alert("Ocurrió un error al calcular el hash. Por favor, intente de nuevo.");
+    }
+});
+
+// Copiar el SHA256 del Modal
+document.getElementById('copyVerifyHashBtn').addEventListener('click', () => {
+    const hashOutput = document.getElementById('verifyHashOutput').textContent;
+    navigator.clipboard.writeText(hashOutput).then(() => {
+        alert("Hash copiado al portapapeles.");
+    }).catch((error) => {
+        console.error("Error al copiar el hash:", error);
+        alert("No se pudo copiar el hash. Inténtelo manualmente.");
+    });
 });
