@@ -48,10 +48,10 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     const file = fileInput.files[0];
     const link = linkInput.value;
 
-   // Calcular hash
-const hash = await calculateHash(file);
-hashOutput.innerHTML = `URL: ${link}<br>SHA256: ${hash}`;
-resultSection.style.display = 'block';
+    // Calcular hash
+    const hash = await calculateHash(file);
+    hashOutput.innerHTML = `URL: ${link}<br>SHA256: ${hash}`;
+    resultSection.style.display = 'block';
 
     // Generar y mostrar QR
     const qrCode = generateQRCode(link);
@@ -106,7 +106,7 @@ document.getElementById('verifyFileInput').addEventListener('change', async (eve
         resultSection.style.display = 'block';
     } catch (error) {
         console.error("Error al calcular el hash:", error);
-        alert("Ocurrió un error al calcular el hash. Por favor, intente de nuevo.");
+        alert("Ocurrió un error al calcular el hash. Intente de nuevo.");
     }
 });
 
@@ -119,4 +119,29 @@ document.getElementById('copyVerifyHashBtn').addEventListener('click', () => {
         console.error("Error al copiar el hash:", error);
         alert("No se pudo copiar el hash. Inténtelo manualmente.");
     });
+});
+
+// Mostrar el hash cuando se hace clic en el botón de calcular hash en móvil
+document.getElementById('calculateHashBtn').addEventListener('click', async () => {
+    const verifyFileInput = document.getElementById('verifyFileInput');
+    const hashOutput = document.getElementById('verifyHashOutput');
+    const resultSection = document.getElementById('verifyResultSection');
+
+    // Verificar si se seleccionó un archivo
+    if (!verifyFileInput.files.length) {
+        alert("Seleccione un archivo para calcular su hash.");
+        return;
+    }
+
+    const file = verifyFileInput.files[0];
+
+    try {
+        // Calcular el hash
+        const hash = await calculateHash(file);
+        hashOutput.textContent = hash;
+        resultSection.style.display = 'block';
+    } catch (error) {
+        console.error("Error al calcular el hash:", error);
+        alert("Ocurrió un error al calcular el hash. Por favor, intente de nuevo.");
+    }
 });

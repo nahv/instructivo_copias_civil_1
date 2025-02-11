@@ -101,3 +101,15 @@ a:hover {
     word-break: break-word;
     overflow-wrap: break-word;
 }
+
+/* Oculta el botón del modal en dekstop */
+#calculateHashBtn {
+    display: none;
+}
+
+/* Pantallas móviles: Muestra el botón */
+@media (max-width: 768px) {
+    #calculateHashBtn {
+        display: block;
+    }
+}
