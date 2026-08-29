@@ -1,20 +1,30 @@
-# Generador de Hash y Código QR
+# Hash y QR para copias de traslado
 
-Este proyecto es una herramienta web que permite calcular el hash SHA-256 de un archivo y generar un código QR a partir de un enlace proporcionado por el usuario. Fue pensado para facilitar la tarea de adjuntar copias para traslado en las notificaciones judiciales que se realizan via [BUS Federal de Jusicia](https://www.bus-justicia.org.ar/) o via cartas documento en Argentina.
+Herramienta web que calcula el **hash SHA-256** de un archivo y genera el **QR** de su
+link público, para adjuntar copias de traslado en notificaciones que se diligencian por
+el [BUS Federal de Justicia](https://www.bus-justicia.org.ar/) o por carta documento.
+
+**El archivo nunca se sube a ningún servidor**: el hash se calcula en el navegador con
+`crypto.subtle`, y el QR se dibuja sobre el link que escribe el usuario.
 
 ## [🔗 Ir a la herramienta](https://nahv.github.io/instructivo_copias_civil_1/)
 
 ## Stack
-- **HTML, CSS y JavaScript**
-- **Bootstrap**
-- **[Crypto.sublte.digest](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest)**
-- **[QRCodeStyling.js](https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js)**
+
+- HTML, CSS y JavaScript, sin build ni dependencias de servidor
+- [`crypto.subtle.digest`](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest) para el SHA-256
+- [QRCodeStyling.js](https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js) para el QR
+
+## Correr en local
+
+```bash
+python3 -m http.server 8020
+```
 
 ## Licencia
 
-Este proyecto está bajo la licencia MIT. 
+MIT.
 
 ---
 
-Desarrollado por Nahuel Vallejos
-
+Desarrollado por Nahuel Vallejos · Una herramienta de [Iudex](https://iudex.com.ar)
