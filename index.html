@@ -33,25 +33,26 @@
     <h2 id="tool-title" class="sr-only">Generar hash y QR</h2>
 
     <div class="field">
-      <label for="fileInput">Archivo de las copias</label>
+      <label for="fileInput">Archivo de las copias <span>para el hash</span></label>
       <input type="file" id="fileInput" />
     </div>
 
     <div class="field">
-      <label for="linkInput">Link público del archivo</label>
+      <label for="linkInput">Link público del archivo <span>para el QR</span></label>
       <input type="url" id="linkInput" placeholder="https://drive.google.com/file/d/…/view" />
     </div>
 
-    <button id="generateBtn" class="btn btn--primary">Generar hash y QR</button>
+    <button id="generateBtn" class="btn btn--primary" disabled>Generar hash y QR</button>
 
     <section id="resultSection" class="result" hidden>
-      <div class="result__hash">
+      <div class="result__hash" id="hashBlock" hidden>
         <div class="result__label">Para pegar en la cédula</div>
         <p id="hashOutput"></p>
         <button id="copyHashBtn" class="btn btn--ghost btn--sm">Copiar</button>
       </div>
-      <div class="result__qr">
+      <div class="result__qr" id="qrBlock" hidden>
         <div id="qrCanvas"></div>
+        <p class="result__qr-pie">iudex.com.ar</p>
         <button id="downloadQrBtn" class="btn btn--ghost btn--sm">Descargar QR</button>
       </div>
     </section>
