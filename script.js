@@ -7,9 +7,10 @@
 
 const $ = (id) => document.getElementById(id);
 
-/* Pie que viaja impreso en la imagen descargada. Va fuera de los modulos
-   del QR, asi no le come correccion de error ni afecta el escaneo. */
-const PIE_QR = 'iudex.com.ar';
+/* Marca al centro del QR. Come modulos, asi que el codigo se genera con
+   correccion de error H (recupera hasta un 30%) y el logo ocupa un 18%:
+   el margen que queda es de sobra para que siga leyendose. */
+const MARCA = 'assets/iudex-mark.png';
 
 async function calcularHash(file) {
   const buffer = await file.arrayBuffer();
@@ -38,6 +39,14 @@ function crearQR(link, tamano) {
     width: tamano,
     height: tamano,
     data: link,
+    image: MARCA,
+    qrOptions: { errorCorrectionLevel: 'H' },
+    imageOptions: {
+      imageSize: 0.18,
+      margin: Math.round(tamano * 0.012),
+      hideBackgroundDots: true,
+      crossOrigin: 'anonymous',
+    },
     dotsOptions: { color: '#0f0f0e', type: 'rounded' },
     backgroundOptions: { color: '#ffffff' },
   });
@@ -120,7 +129,7 @@ function cargarImagen(blob) {
 }
 
 /* Descarga a 600px (impreso en una cedula, 190 se ve pixelado) sobre fondo
-   blanco con margen —zona de silencio para el lector— y el pie debajo. */
+   blanco con margen: es la zona de silencio que necesita el lector. */
 $('downloadQrBtn').addEventListener('click', async (e) => {
   if (!linkDelQR) return;
   const boton = e.currentTarget;
@@ -131,22 +140,14 @@ $('downloadQrBtn').addEventListener('click', async (e) => {
     const img = await cargarImagen(blob);
 
     const margen = Math.round(lado * 0.08);
-    const altoPie = Math.round(lado * 0.1);
     const canvas = document.createElement('canvas');
     canvas.width = lado + margen * 2;
-    canvas.height = lado + margen + altoPie;
+    canvas.height = lado + margen * 2;
 
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, margen, margen, lado, lado);
-
-    try { await document.fonts.ready; } catch { /* fuente de sistema */ }
-    ctx.fillStyle = '#8a8a84';
-    ctx.font = `${Math.round(lado * 0.042)}px "DM Mono", ui-monospace, monospace`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(PIE_QR, canvas.width / 2, lado + margen + altoPie / 2);
 
     const png = await new Promise((r) => canvas.toBlob(r, 'image/png'));
     const url = URL.createObjectURL(png);

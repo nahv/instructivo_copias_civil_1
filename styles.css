@@ -189,14 +189,6 @@ body {
   align-items: center;
   gap: 14px;
 }
-/* Mismo pie que se imprime dentro del PNG: lo que se ve es lo que se baja. */
-.result__qr-pie {
-  margin: -8px 0 0;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-  color: var(--ink-muted);
-}
 #qrCanvas {
   background: #fff;
   border: 1px solid var(--hair);
