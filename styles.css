@@ -214,41 +214,37 @@ body {
 .verify__body .btn { width: 100%; }
 .verify__body .result__hash { margin-top: 16px; }
 
-/* ---------- Iudex ---------- */
+/* ---------- Iudex (mención discreta, no un banner) ---------- */
 .iudex {
-  margin-top: 46px;
-  background: var(--ink);
-  color: var(--cream);
-  border-radius: var(--radius);
-  padding: 38px 30px;
-  text-align: center;
+  margin-top: 34px;
+  padding-top: 20px;
+  border-top: 1px solid var(--hair);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
 }
-.iudex__eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-.iudex h2 {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(1.6rem, 5vw, 2.1rem);
-  line-height: 1.15;
-  margin: 14px 0 12px;
-}
-.iudex h2 em { font-style: italic; color: var(--gold); }
 .iudex p {
-  margin: 0 auto 24px;
-  max-width: 44ch;
-  font-size: 0.92rem;
-  color: rgba(247, 244, 238, 0.72);
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--ink-muted);
 }
-.iudex .btn--primary {
-  width: auto;
-  background: var(--cream);
+.iudex strong {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
   color: var(--ink);
 }
+.iudex a {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-deep);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.iudex a:hover { text-decoration: underline; }
 
 /* ---------- Pie ---------- */
 .foot {
@@ -269,5 +265,4 @@ body {
 @media (max-width: 560px) {
   .wrap { padding: 44px 16px 32px; }
   .card { padding: 22px 18px; }
-  .iudex { padding: 32px 22px; }
 }
