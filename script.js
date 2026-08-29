@@ -1,147 +1,91 @@
-// Función para calcular el hash del archivo
-async function calculateHash(file) {
-    const arrayBuffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
+/* Hash y QR para copias de traslado.
+   El archivo NUNCA sale del navegador: crypto.subtle calcula el SHA-256
+   localmente y el QR se dibuja sobre el link que escribe el usuario. */
+
+const $ = (id) => document.getElementById(id);
+
+async function calcularHash(file) {
+  const buffer = await file.arrayBuffer();
+  const digest = await crypto.subtle.digest('SHA-256', buffer);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
-// Generar QR para el link ingresado
-function generateQRCode(link) {
-    const qrCode = new QRCodeStyling({
-        width: 200,
-        height: 200,
-        data: link,
-        dotsOptions: {
-            color: "#0056b3",
-            type: "rounded"
-        },
-        backgroundOptions: {
-            color: "#ffffff",
-        }
-    });
-
-    const canvas = document.getElementById('qrCanvas');
-    qrCode.append(canvas);
-
-    return qrCode; // Para usar en descarga
+/** Copia al portapapeles y confirma en el propio botón (sin alert). */
+async function copiar(texto, boton) {
+  if (!texto.trim()) return;
+  try {
+    await navigator.clipboard.writeText(texto);
+    const original = boton.textContent;
+    boton.textContent = 'Copiado';
+    setTimeout(() => { boton.textContent = original; }, 1600);
+  } catch {
+    boton.textContent = 'No se pudo copiar';
+    setTimeout(() => { boton.textContent = 'Copiar'; }, 1600);
+  }
 }
 
-// Manejo del evento de generación
-document.getElementById('generateBtn').addEventListener('click', async () => {
-    const fileInput = document.getElementById('fileInput');
-    const linkInput = document.getElementById('linkInput');
-    const hashOutput = document.getElementById('hashOutput');
-    const resultSection = document.getElementById('resultSection');
+/* ---------- Generar hash + QR ---------- */
 
-    if (!fileInput.files.length) {
-        alert("Seleccione un archivo para generar su hash.");
-        return;
-    }
+let qr = null;
 
-    if (!linkInput.value) {
-        alert("Ingrese un link para generar el QR.");
-        return;
-    }
+$('generateBtn').addEventListener('click', async () => {
+  const file = $('fileInput').files[0];
+  const link = $('linkInput').value.trim();
+  const boton = $('generateBtn');
 
-    const file = fileInput.files[0];
-    const link = linkInput.value;
+  if (!file) return $('fileInput').focus();
+  if (!link) return $('linkInput').focus();
 
-    // Calcular hash
-    const hash = await calculateHash(file);
-    hashOutput.innerHTML = `URL: ${link}<br>SHA256: ${hash}`;
-    resultSection.style.display = 'block';
+  boton.disabled = true;
+  boton.textContent = 'Calculando…';
+  try {
+    const hash = await calcularHash(file);
+    $('hashOutput').innerHTML = `URL: ${link}<br>SHA256: ${hash}`;
+    $('resultSection').hidden = false;
 
-    // Generar y mostrar QR
-    const qrCode = generateQRCode(link);
-
-    // Descargar QR
-    document.getElementById('downloadQrBtn').addEventListener('click', () => {
-        qrCode.download({
-            name: "qr_code",
-            extension: "png"
-        });
+    // Un solo QR por sesión: se re-dibuja en vez de apilar canvases.
+    const contenedor = $('qrCanvas');
+    contenedor.innerHTML = '';
+    qr = new QRCodeStyling({
+      width: 190,
+      height: 190,
+      data: link,
+      dotsOptions: { color: '#0f0f0e', type: 'rounded' },
+      backgroundOptions: { color: '#ffffff' },
     });
+    qr.append(contenedor);
+  } finally {
+    boton.disabled = false;
+    boton.textContent = 'Generar hash y QR';
+  }
 });
 
-// Copiar el contenido del hashOutput al portapapeles
-document.getElementById('copyHashBtn').addEventListener('click', () => {
-    const hashOutput = document.getElementById('hashOutput');
-    const content = hashOutput.innerText;
-
-    if (content.trim() === "") {
-        alert("No hay contenido para copiar.");
-        return;
-    }
-
-    navigator.clipboard.writeText(content)
-        .then(() => {
-            alert("Copiado al portapapeles.");
-        })
-        .catch(err => {
-            console.error("Error al copiar:", err);
-            alert("Hubo un error al intentar copiar el contenido.");
-        });
+$('downloadQrBtn').addEventListener('click', () => {
+  if (qr) qr.download({ name: 'qr-copias', extension: 'png' });
 });
 
-// Detectar cambios en el input de archivo y calcular el hash automáticamente
-document.getElementById('verifyFileInput').addEventListener('change', async (event) => {
-    const fileInput = event.target;
-    const hashOutput = document.getElementById('verifyHashOutput');
-    const resultSection = document.getElementById('verifyResultSection');
-
-    // Verificar si se seleccionó un archivo
-    if (!fileInput.files.length) {
-        resultSection.style.display = 'none';
-        return;
-    }
-
-    const file = fileInput.files[0];
-
-    try {
-        // Calcular el hash
-        const hash = await calculateHash(file);
-        hashOutput.textContent = hash;
-        resultSection.style.display = 'block';
-    } catch (error) {
-        console.error("Error al calcular el hash:", error);
-        alert("Ocurrió un error al calcular el hash. Intente de nuevo.");
-    }
+$('copyHashBtn').addEventListener('click', (e) => {
+  copiar($('hashOutput').innerText, e.currentTarget);
 });
 
-// Copiar el SHA256 del Modal
-document.getElementById('copyVerifyHashBtn').addEventListener('click', () => {
-    const hashOutput = document.getElementById('verifyHashOutput').textContent;
-    navigator.clipboard.writeText(hashOutput).then(() => {
-        alert("Hash copiado al portapapeles.");
-    }).catch((error) => {
-        console.error("Error al copiar el hash:", error);
-        alert("No se pudo copiar el hash. Inténtelo manualmente.");
-    });
-});
+/* ---------- Verificador ---------- */
 
-// Mostrar el hash cuando se hace clic en el botón de calcular hash en móvil
-document.getElementById('calculateHashBtn').addEventListener('click', async () => {
-    const verifyFileInput = document.getElementById('verifyFileInput');
-    const hashOutput = document.getElementById('verifyHashOutput');
-    const resultSection = document.getElementById('verifyResultSection');
+async function verificar() {
+  const file = $('verifyFileInput').files[0];
+  if (!file) {
+    $('verifyResultSection').hidden = true;
+    return;
+  }
+  $('verifyHashOutput').textContent = await calcularHash(file);
+  $('verifyResultSection').hidden = false;
+}
 
-    // Verificar si se seleccionó un archivo
-    if (!verifyFileInput.files.length) {
-        alert("Seleccione un archivo para calcular su hash.");
-        return;
-    }
+// Al elegir archivo calcula solo; el botón queda para reintentar.
+$('verifyFileInput').addEventListener('change', verificar);
+$('calculateHashBtn').addEventListener('click', verificar);
 
-    const file = verifyFileInput.files[0];
-
-    try {
-        // Calcular el hash
-        const hash = await calculateHash(file);
-        hashOutput.textContent = hash;
-        resultSection.style.display = 'block';
-    } catch (error) {
-        console.error("Error al calcular el hash:", error);
-        alert("Ocurrió un error al calcular el hash. Por favor, intente de nuevo.");
-    }
+$('copyVerifyHashBtn').addEventListener('click', (e) => {
+  copiar($('verifyHashOutput').textContent, e.currentTarget);
 });

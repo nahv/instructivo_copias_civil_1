@@ -1,142 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Copias para traslado digitales - Cédulas Ley 22.172 - Cartas Documento</title>
-    <!-- Bootstrap CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-     <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hash y QR para copias de traslado</title>
+  <meta name="description" content="Generá el hash SHA-256 de un archivo y el QR de su link, para adjuntar copias de traslado en cédulas y cartas documento. Gratis y sin subir nada: todo se calcula en tu navegador." />
+  <meta name="keywords" content="hash SHA-256, QR, copias de traslado, cédulas, Bus Federal de Justicia, carta documento, Iudex" />
+  <meta property="og:title" content="Hash y QR para copias de traslado" />
+  <meta property="og:description" content="Generá el hash SHA-256 de un archivo y el QR de su link. Todo se calcula en tu navegador — el archivo nunca se sube." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_AR" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
 </head>
 <body>
-    <header class="text-center p-3 bg-primary text-white">
-        <h1>Copias para traslado digitales <br> en cédulas y cartas documento</h1>
-    </header>
-    <div class="centered_container my-4">
-        <main>
-            <section id="objetivo" class="section-box mb-4">
-                <p>
-                    Esta herramienta facilita <strong>adjuntar copias para traslado en QR </strong> en sus notificaciones.<br>
-                    Para usar en cédulas que se diligencian a través del Bus Federal de Justicia o en cartas documento.
-                </p>
-            </section>
-            <section id="objetivo" class="section-box mb-4">
-                <p>
-                    Nótese que desde <strong>el 01 de octubre de 2025,</strong> los siguientes pasos son realizados en el Juzgado.<br> <br>
-                    <u>Los profesionales solamente deben enviar el proyecto correspondiente via Forum. </u><br><br>
-                    <strong>Procure adjuntar las copias para traslado, si hubieren, en un sólo archivo PDF.</strong>
-                </p>
-            </section>
-            <section id="pasos" class="section-box mb-4">
-                <h2 class="text-center">Pasos</h2>
-                <ol>
-                    <li class="mb-4">
-                        <h3>📑 Prepare las copias</h3>
-                        <p>Es recomendable unir todas las copias en <strong>un solo archivo PDF</strong>.<br>
-                        Puede utilizar programas gratuitos como <a href="https://www.pdf24.org/en/" target="_blank">PDF24</a> para unirlas si las tiene en archivos separados.</p>
-                    </li>
-                    <li class="mb-4">
-                        <h3>☁️ Suba las copias a la nube</h3>
-                        <p>Suba el archivo a un servicio de almacenamiento en la nube, como <a href="https://drive.google.com/" target="_blank">Google Drive</a> o <a href="https://www.dropbox.com/" target="_blank">Dropbox</a>. <br>
-                        Asegúrese de configurar el nivel de acceso como <strong>público</strong> (que cualquiera con el link pueda acceder).</p>
-                    </li>
-                    <li class="mb-4">
-                        <h3>🔒📲 Generar hash y QR</h3>
-                        <div class="info-box p-3">
-                            <strong>Nota:</strong> El <i>hash</i> es un código que permite verificar que las copias recibidas en el archivo sean idénticas a las precisadas en la notificación. El QR facilita el acceso al link desde la cámara del celular.
-                        </div> <br>
-                        <p>Cargue el <strong>archivo de las copias y su link público:</strong>
-                            <br>
-                            <br>
-                        <input type="file" id="fileInput" class="form-control mb-3">
-                        <label>Link:</label>
-                        <input type="url" id="linkInput" placeholder="Ejemplo: https://drive.google.com/file/d/1DwcOH2yUEt2iKPwh2zoccFmL8KfjLhk_/view" class="form-control mb-3">
 
-                        <div class="row">
-                            <div class="col"></div>
-                        <button id="generateBtn" class="btn btn-primary col">Generar hash y QR</button>
-                            <div class="col"></div>
-                        </div>
-                        <section id="resultSection" style="display: none; margin-top: 2rem;">
-                            <div id="hashContainer" class="info-box p-3 bg-light border position-relative" style="width:100%;">
-                                <p id="hashOutput" class="m-0"></p>
-                                <button id="copyHashBtn" class="btn btn-outline-secondary btn-sm position-absolute">Copiar</button>
-                            </div>                            
-                            <div id="qrContainer" class="text-center">
-                                 <div id="qrCanvas" class="border"></div> 
-                                <button id="downloadQrBtn" class="btn btn-secondary mt-3">Descargar QR</button>
-                            </div>
-<br>
-                            <h3>📤 Adjuntar y presentar</h3><br>
-                        <p>✍️ Redacte su cédula o carta en un archivo de texto y al final de la misma inserte <strong>el link, el QR y el hash generados</strong>.</p>
-                            ✅ Convierta su cédula o carta a PDF y presentela via Forum.
-                            <br>
-                            <br>
-                            <div class="info-box p-3">
-                            <strong>BUS Federal:</strong> Consulte si existen requerimientos del Poder Judicial de la provincia destinataria en las Guías de Trámite de la <a href="https://www.bus-justicia.org.ar" target="_blank">página web del Bus Federal</a>. <br>
-                            En el caso de requerirse tasas de justicia, deberá subir a Forum también el comprobante correspondiente.
-                        </div>
-                            <br>
-                        </p>
-                    </li>
-                </ol>
-            </section>
+<main class="wrap">
 
-            <section id="notas" class="section-box mb-4">
-                <h2 class="text-center">📌</h2>
-                <ul>
-                    <li>🚫 Es importante que <strong>no</strong> modifique el archivo de las copias en la nube una vez que envió el documento.</li>
-                    <li>🌎 Los documentos compartidos deben tener acceso público para poder ser consultados.</li>
-                    <li>✅ Puede verificar el hash de cualquier archivo en la siguiente herramienta:</li> 
-                </ul>
-                <div class="row">
-                    <div class="col"></div>
-                <button type="button" class="btn btn-light w-100 mt-3 col" data-bs-toggle="modal" data-bs-target="#verifyModal">
-                    Verificador de hash
-                  </button>
-                    <div class="col"></div>
-                </div>
-            </section>
-                        </section>
-                    </li>
-                </ol>
-        </main>
+  <header class="head">
+    <h1>Hash y <em>QR</em></h1>
+    <p class="head__sub">
+      Para adjuntar copias de traslado en cédulas y cartas documento.
+      <span>El archivo no se sube a ningún lado: el hash se calcula en tu navegador.</span>
+    </p>
+  </header>
+
+  <!-- HERRAMIENTA -->
+  <section class="card" aria-labelledby="tool-title">
+    <h2 id="tool-title" class="sr-only">Generar hash y QR</h2>
+
+    <div class="field">
+      <label for="fileInput">Archivo de las copias</label>
+      <input type="file" id="fileInput" />
     </div>
-<!-- Modal Verificador de SHA256 -->
-<div class="modal fade" id="verifyModal" tabindex="-1" aria-labelledby="verifyModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="verifyModalLabel">Verificar hash</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="file" id="verifyFileInput" class="form-control mb-3">
-                <button id="calculateHashBtn" class="btn btn-primary w-100">Calcular hash</button>
-                <div id="verifyResultSection" style="display: none; margin-top: 1rem;">
-                    <h6>Hash <i>(SHA256)</i>:</h6>
-                    <div id="verifyHashContainer" class="info-box p-2 bg-light border">
-                        <p id="verifyHashOutput" class="m-0"></p>
-                        <button id="copyVerifyHashBtn" class="btn btn-outline-secondary btn-sm mt-2">Copiar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a href="https://es.wikipedia.org/wiki/SHA-2" target="_blank" class="text-decoration-none small text-muted">
-                    ¿Qué es SHA-256?
-                </a>
-            </div>
-        </div>
+
+    <div class="field">
+      <label for="linkInput">Link público del archivo</label>
+      <input type="url" id="linkInput" placeholder="https://drive.google.com/file/d/…/view" />
     </div>
-</div>
 
+    <button id="generateBtn" class="btn btn--primary">Generar hash y QR</button>
 
-    
-    <footer class="text-center p-3 bg-primary text-white">
-        <p><strong>&copy; Desarrollado por Nahuel Vallejos<br>Juzgado Civil y Comercial N° 1<br> Poder Judicial de la Provincia de Corrientes. 2024</strong></p>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <section id="resultSection" class="result" hidden>
+      <div class="result__hash">
+        <div class="result__label">Para pegar en la cédula</div>
+        <p id="hashOutput"></p>
+        <button id="copyHashBtn" class="btn btn--ghost btn--sm">Copiar</button>
+      </div>
+      <div class="result__qr">
+        <div id="qrCanvas"></div>
+        <button id="downloadQrBtn" class="btn btn--ghost btn--sm">Descargar QR</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- VERIFICADOR -->
+  <details class="verify">
+    <summary>Verificar el hash de un archivo</summary>
+    <div class="verify__body">
+      <div class="field">
+        <label for="verifyFileInput">Archivo a verificar</label>
+        <input type="file" id="verifyFileInput" />
+      </div>
+      <button id="calculateHashBtn" class="btn btn--ghost">Calcular hash</button>
+      <div id="verifyResultSection" class="result__hash" hidden>
+        <div class="result__label">SHA-256</div>
+        <p id="verifyHashOutput"></p>
+        <button id="copyVerifyHashBtn" class="btn btn--ghost btn--sm">Copiar</button>
+      </div>
+    </div>
+  </details>
+
+  <!-- IUDEX -->
+  <aside class="iudex">
+    <div class="iudex__copy">
+      <span class="iudex__eyebrow">Iudex</span>
+      <h2>Donde el derecho <em>se piensa</em>.</h2>
+      <p>
+        Esta herramienta nació de la práctica diaria en tribunales. Lo mismo que Iudex:
+        expedientes, plazos y escritos en un solo lugar, en el navegador.
+      </p>
+      <a class="btn btn--primary" href="https://iudex.com.ar/?utm_source=hashqr&amp;utm_medium=herramienta&amp;utm_campaign=copias" target="_blank" rel="noopener">
+        Conocer Iudex
+      </a>
+    </div>
+  </aside>
+
+  <footer class="foot">
+    <span>Hecho en Corrientes, para el derecho argentino.</span>
+    <a href="https://iudex.com.ar/?utm_source=hashqr&amp;utm_medium=footer&amp;utm_campaign=copias" target="_blank" rel="noopener">iudex.com.ar</a>
+  </footer>
+
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
